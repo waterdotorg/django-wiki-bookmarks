@@ -1,0 +1,31 @@
+  <div class="bookmarks clearfix">
+    {% if bookmarks.count %}
+      <div style="display: none;">
+        <form id="bookmark-multiple-form" method="POST" action="{% url 'bookmarks_ajax' %}">{% csrf_token %}
+          <input type="hidden" value="" name="article_id" id="multi_id_article_id">
+        </form>
+      </div>
+
+      <table class="table table-striped bookmark">
+        <thead>
+          <tr>
+            <th></th>
+            <th>Article</th>
+            <th>Modified</th>
+          </tr>
+        </thead>
+        {% for bookmark in bookmarks %}
+        <tr>
+          <td>
+            <a data-article-id="{{ bookmark.article.id }}" id="bs-{{ bookmark.article.id }}" class="bookmark-star" href="#">
+              <span class="icon-star"></span>        
+            </a>
+          </td>
+          <td><a href="{% url 'wiki:get' article_id=bookmark.article.id %}">{{ bookmark.article.current_revision.title }}</a></td>
+          <td data-sort="{{ bookmark.updated_date|date:'U' }}">{{ bookmark.updated_date|date:"Y-m-d" }}</td> 
+        </tr>
+        {% endfor %}
+      </table>
+    {% endif %}
+  </div>
+
